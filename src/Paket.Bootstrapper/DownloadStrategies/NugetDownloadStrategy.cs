@@ -74,6 +74,7 @@ namespace Paket.Bootstrapper.DownloadStrategies
         public string GetLatestVersion(bool ignorePrerelease)
         {
             IEnumerable<string> allVersions = null;
+            string latestVersion = null;
             if (DirectoryProxy.Exists(NugetSource))
             {
                 var paketPrefix = "paket.";
@@ -84,6 +85,8 @@ namespace Paket.Bootstrapper.DownloadStrategies
                     // likely contains the bootstrapper or paket.core
                     Where(x => x.Length > paketPrefix.Length && Char.IsDigit(x[paketPrefix.Length])).
                     Select(x => x.Substring(paketPrefix.Length));
+
+                latestVersion = GetLatestVersionFromVersions(allVersions, ignorePrerelease);
             }
             else
             {
@@ -94,8 +97,16 @@ namespace Paket.Bootstrapper.DownloadStrategies
                     Trim('[', ']').
                     Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).
                     Select(x => x.Trim('"'));
+
+                latestVersion = GetLatestVersionFromVersions(allVersions, ignorePrerelease);
             }
-            var latestVersion = allVersions.
+
+            return latestVersion;
+        }
+
+        private string GetLatestVersionFromVersions(IEnumerable<string> versions, bool ignorePrerelease)
+        {
+            var latestVersion = versions.
                     Select(SemVer.Create).
                     Where(x => !ignorePrerelease || (x.PreRelease == null)).
                     OrderBy(x => x).
