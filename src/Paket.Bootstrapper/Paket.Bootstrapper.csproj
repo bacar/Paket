@@ -37,13 +37,16 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgumentParser.cs" />
     <Compile Include="BootstrapperHelper.cs" />
     <Compile Include="BootstrapperOptions.cs" />
     <Compile Include="DownloadStrategies\CacheDownloadStrategy.cs" />
+    <Compile Include="DownloadStrategies\NugetFeedEntry.cs" />
     <Compile Include="HelperProxies\IWebRequestProxy.cs" />
     <Compile Include="HelperProxies\WebRequestProxy.cs" />
     <Compile Include="HelperProxies\DirectoryProxy.cs" />
