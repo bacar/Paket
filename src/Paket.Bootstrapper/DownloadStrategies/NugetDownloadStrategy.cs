@@ -21,6 +21,8 @@ namespace Paket.Bootstrapper.DownloadStrategies
             const string GetLatestFromNugetUrlTemplate = "{0}/package/{1}";
             const string GetSpecificFromNugetUrlTemplate = "{0}/package/{1}/{2}";
 
+            const string GetLatestPackageVersionUsingODataTemplate = "{0}/Packages?$filter=Id eq '{1}' and Is{2}LatestVersion eq true";
+
             public NugetApiHelper(string packageName, string nugetSource)
             {
                 this.packageName = packageName;
@@ -34,6 +36,11 @@ namespace Paket.Bootstrapper.DownloadStrategies
                 if (includePrerelease)
                     request += withPrereleases;
                 return request;
+            }
+
+            internal string GetLatestPackageVersionWithODataQuery(bool includePrerelease)
+            {
+                return string.Format(GetLatestPackageVersionUsingODataTemplate, nugetSource, packageName, includePrerelease ? "Absolute" : string.Empty);
             }
 
             internal string GetLatestPackage()

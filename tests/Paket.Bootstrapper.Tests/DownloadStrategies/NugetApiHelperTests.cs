@@ -13,6 +13,12 @@ namespace Paket.Bootstrapper.Tests.DownloadStrategies
             var sut = new NugetDownloadStrategy.NugetApiHelper("anyPackage", null);
             Assert.That(sut.GetAllPackageVersions(false), Is.EqualTo("https://www.nuget.org/api/v2/package-versions/anyPackage"));
             Assert.That(sut.GetAllPackageVersions(true), Is.EqualTo("https://www.nuget.org/api/v2/package-versions/anyPackage?includePrerelease=true"));
+
+            Assert.That(sut.GetLatestPackageVersionWithODataQuery(includePrerelease: false), 
+                Is.EqualTo(("https://www.nuget.org/api/v2/Packages?$filter=Id eq 'anyPackage' and IsLatestVersion eq true")));
+            Assert.That(sut.GetLatestPackageVersionWithODataQuery(includePrerelease: true), 
+                Is.EqualTo(("https://www.nuget.org/api/v2/Packages?$filter=Id eq 'anyPackage' and IsAbsoluteLatestVersion eq true")));
+
             Assert.That(sut.GetLatestPackage(), Is.EqualTo("https://www.nuget.org/api/v2/package/anyPackage"));
             Assert.That(sut.GetSpecificPackageVersion(null), Is.EqualTo("https://www.nuget.org/api/v2/package/anyPackage/"));
             Assert.That(sut.GetSpecificPackageVersion("any"), Is.EqualTo("https://www.nuget.org/api/v2/package/anyPackage/any"));
@@ -24,6 +30,12 @@ namespace Paket.Bootstrapper.Tests.DownloadStrategies
             var sut = new NugetDownloadStrategy.NugetApiHelper("anyPackage", "anySource");
             Assert.That(sut.GetAllPackageVersions(false), Is.EqualTo("anySource/package-versions/anyPackage"));
             Assert.That(sut.GetAllPackageVersions(true), Is.EqualTo("anySource/package-versions/anyPackage?includePrerelease=true"));
+
+            Assert.That(sut.GetLatestPackageVersionWithODataQuery(includePrerelease: false),
+                Is.EqualTo(("anySource/Packages?$filter=Id eq 'anyPackage' and IsLatestVersion eq true")));
+            Assert.That(sut.GetLatestPackageVersionWithODataQuery(includePrerelease: true),
+                Is.EqualTo(("anySource/Packages?$filter=Id eq 'anyPackage' and IsAbsoluteLatestVersion eq true")));
+
             Assert.That(sut.GetLatestPackage(), Is.EqualTo("anySource/package/anyPackage"));
             Assert.That(sut.GetSpecificPackageVersion(null), Is.EqualTo("anySource/package/anyPackage/"));
             Assert.That(sut.GetSpecificPackageVersion("any"), Is.EqualTo("anySource/package/anyPackage/any"));
